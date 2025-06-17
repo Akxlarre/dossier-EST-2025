@@ -110,7 +110,7 @@
     </p>
     <div class="mt-10 relative">
       <div class="w-48 h-48 rounded-full overflow-hidden ring-4 ring-green-500/60 shadow-lg">
-        <img id="portrait" src="assets/img/boca-cerrada.png" alt="Retrato de Benjamín" class="object-cover w-full h-full">
+        <img id="portrait" src="assets/img/boca-cerrada.webp" alt="Retrato de Benjamín" class="object-cover w-full h-full">
       </div>
       <div id="speech-bubble" class="speech-bubble"></div>
       <div id="speech-bubble-mobile" class="speech-bubble-mobile"></div>
@@ -163,7 +163,7 @@
   <h2 class="text-3xl font-bold text-green-400 mb-8">Proyecto Destacado · Tech Farming</h2>
   <div class="grid lg:grid-cols-2 gap-6 items-start">
     <figure class="rounded-lg overflow-hidden shadow-xl ring-1 ring-green-600/50">
-      <img src="assets/img/techfarming-dashboard.png" alt="Mockup Tech Farming" class="object-cover w-full h-full">
+      <img src="assets/img/techfarming-dashboard.webp" alt="Mockup Tech Farming" class="object-cover w-full h-full">
     </figure>
     <div class="space-y-4 text-gray-300">
       <p><strong>Tech Farming</strong> es una plataforma inteligente de agricultura de precisión desarrollada como proyecto académico-profesional (APT) en DUOC UC. Combina IoT, visualización de datos en tiempo real y aprendizaje automático para optimizar el cuidado de invernaderos.</p>
@@ -178,9 +178,9 @@
     </div>
   </div>
   <div class="mt-10 grid md:grid-cols-3 gap-4">
-    <img src="assets/img/techfarming-sensors.png" alt="Sensores" class="rounded-lg shadow-md">
-    <img src="assets/img/techfarming-maps.png" alt="Mapa de Zonas" class="rounded-lg shadow-md">
-    <img src="assets/img/techfarming-analytics.png" alt="Analytics" class="rounded-lg shadow-md">
+    <img src="assets/img/techfarming-sensors.webp" alt="Sensores" class="rounded-lg shadow-md">
+    <img src="assets/img/techfarming-maps.webp" alt="Mapa de Zonas" class="rounded-lg shadow-md">
+    <img src="assets/img/techfarming-analytics.webp" alt="Analytics" class="rounded-lg shadow-md">
   </div>
 </section>
 
@@ -230,9 +230,9 @@
     (function () {
       /* Rutas de los frames de boca */
       const frames = {
-        closed: 'assets/img/boca-cerrada.png',
-        half:   'assets/img/boca-media.png',
-        open:   'assets/img/boca-abierta.png',
+        closed: 'assets/img/boca-cerrada.webp',
+        half:   'assets/img/boca-media.webp',
+        open:   'assets/img/boca-abierta.webp',
       };
 
       const TYPE_DELAY   = 75;   // ms por carácter impreso
@@ -330,8 +330,8 @@
 
       let idleT, blinkT, glanceT;
       let isTracking = false;
-      let currentSrc = 'look-center.png';
-      let targetSrc = 'look-center.png';
+      let currentSrc = 'look-center.webp';
+      let targetSrc = 'look-center.webp';
 
       const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
@@ -348,7 +348,7 @@
 
         blinkT = setTimeout(() => {
           const last = currentSrc;
-          setAvatar('close-eyes.png');
+          setAvatar('close-eyes.webp');
           setTimeout(() => setAvatar(last), BLINK_CLOSED_MS);
           scheduleBlink(isFocus);
         }, delay);
@@ -358,7 +358,7 @@
         clearTimeout(idleT);
         idleT = setTimeout(() => {
           isTracking = false;
-          targetSrc = 'look-center.png';
+          targetSrc = 'look-center.webp';
           setAvatar(targetSrc);
           scheduleBlink(false);
         }, IDLE_DELAY_MS);
@@ -373,18 +373,18 @@
         const dist = Math.hypot(dx, dy);
         const radius = rect.width / 2;
 
-        let src = 'look-center.png';
+        let src = 'look-center.webp';
 
         if (dist > radius) {
           const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-          if      (angle >=  -22 && angle <   22) src = 'look-right.png';
-          else if (angle >=   22 && angle <   67) src = 'look-down-right.png';
-          else if (angle >=   67 && angle <  112) src = 'look-down.png';
-          else if (angle >=  112 && angle <  157) src = 'look-down-left.png';
-          else if (angle >=  157 || angle < -157) src = 'look-left.png';
-          else if (angle >= -157 && angle < -112) src = 'look-up-left.png';
-          else if (angle >= -112 && angle <  -67) src = 'look-up.png';
-          else if (angle >=  -67 && angle <  -22) src = 'look-up-right.png';
+          if      (angle >=  -22 && angle <   22) src = 'look-right.webp';
+          else if (angle >=   22 && angle <   67) src = 'look-down-right.webp';
+          else if (angle >=   67 && angle <  112) src = 'look-down.webp';
+          else if (angle >=  112 && angle <  157) src = 'look-down-left.webp';
+          else if (angle >=  157 || angle < -157) src = 'look-left.webp';
+          else if (angle >= -157 && angle < -112) src = 'look-up-left.webp';
+          else if (angle >= -112 && angle <  -67) src = 'look-up.webp';
+          else if (angle >=  -67 && angle <  -22) src = 'look-up-right.webp';
         }
 
         if (src !== targetSrc) {
@@ -402,9 +402,9 @@
 
       function scheduleMobileGlance() {
         const directions = [
-          'look-left.png', 'look-right.png', 'look-up.png',
-          'look-up-left.png', 'look-up-right.png',
-          'look-center.png'
+          'look-left.webp', 'look-right.webp', 'look-up.webp',
+          'look-up-left.webp', 'look-up-right.webp',
+          'look-center.webp'
         ];
 
         function nextGlance() {
