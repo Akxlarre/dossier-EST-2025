@@ -6,10 +6,27 @@
   <title>Dossier de Postulación – Escuela de Sensibilización Tecnológica 2025</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- jQuery CDN -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <link rel="stylesheet" href="css/custom.css">
   <style>
+    /* Splash screen styles */
+    #splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0d1117;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      transition: opacity 0.5s ease-out;
+    }
+
+    #splash-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     @media print {
       .page { page-break-after: always; }
       a:hover { text-decoration: none; }
@@ -17,6 +34,10 @@
   </style>
 </head>
 <body class="bg-[#0d1117] text-gray-200 font-sans leading-relaxed">
+
+  <div id="splash-screen" class="fixed inset-0 flex items-center justify-center bg-[#0d1117] z-50">
+    <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-green-400 drop-shadow-lg">Benjamín Rebolledo</h1>
+  </div>
 
   <!-- PORTADA -->
   <section class="page h-screen flex flex-col items-center justify-center text-center px-6">
@@ -115,6 +136,21 @@
     <p class="mt-8 text-gray-400">¡Gracias por considerar mi postulación!</p>
   </section>
 
-  <script src="js/scripts.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var splash = document.getElementById('splash-screen');
+      if (!splash) return;
+      setTimeout(function () {
+        splash.classList.add('hidden');
+        splash.addEventListener('transitionend', function () {
+          splash.remove();
+        });
+        var title = document.querySelector('h1');
+        if (title) {
+          title.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 2000);
+    });
+  </script>
 </body>
 </html>
