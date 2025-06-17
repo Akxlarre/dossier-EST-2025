@@ -202,30 +202,41 @@
 </section>
   <script src="js/scripts.js"></script>
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      var splash = document.getElementById('splash-screen');
-      if (!splash) return;
-      var title = document.querySelector('section.page h1');
-      var splashTitle = splash.querySelector('h1');
-      if (!title || !splashTitle) return;
+    document.addEventListener('DOMContentLoaded', () => {
+      const splash = document.getElementById('splash-screen');
+      const splashTitle = splash?.querySelector('h1');
+      const portrait = document.getElementById('portrait');
 
-      setTimeout(function () {
-        var targetRect = title.getBoundingClientRect();
-        var splashRect = splashTitle.getBoundingClientRect();
-        var dx = targetRect.left - splashRect.left;
-        var dy = targetRect.top - splashRect.top;
+      if (!splash || !splashTitle || !portrait) return;
 
-        splashTitle.style.transition = 'transform 0.6s ease';
-        splashTitle.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+      // Asegúrate de que la imagen del avatar esté cargada
+      portrait.onload = () => {
+        // Transición suave cuando todo esté listo
+        requestAnimationFrame(() => {
+          const targetRect = document.querySelector('section.page h1').getBoundingClientRect();
+          const splashRect = splashTitle.getBoundingClientRect();
+          const dx = targetRect.left - splashRect.left;
+          const dy = targetRect.top - splashRect.top;
 
-          splashTitle.addEventListener('transitionend', function handleMove() {
-            splashTitle.removeEventListener('transitionend', handleMove);
+          splashTitle.style.transition = 'transform 0.6s ease';
+          splashTitle.style.transform = `translate(${dx}px, ${dy}px)`;
+
+          splashTitle.addEventListener('transitionend', function handler() {
+            splashTitle.removeEventListener('transitionend', handler);
             splash.classList.add('hidden');
-            splash.addEventListener('transitionend', function () {
+
+            splash.addEventListener('transitionend', () => {
               splash.remove();
+              launchGreeting(); // <-- inicia animación de habla
             });
           });
-      }, 2000);
+        });
+      };
+
+      // En caso que ya esté cacheada
+      if (portrait.complete) {
+        portrait.onload(); // llama a onload manualmente
+      }
     });
     (function () {
       /* Rutas de los frames de boca */
