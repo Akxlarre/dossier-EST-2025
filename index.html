@@ -10,6 +10,26 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="css/custom.css">
   <style>
+    /* Splash screen styles */
+    #splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #0d1117;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      transition: opacity 0.5s ease-out;
+    }
+
+    #splash-screen.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     @media print {
       .page { page-break-after: always; }
       a:hover { text-decoration: none; }
@@ -35,7 +55,7 @@
     </div>
     <footer class="mt-12 text-sm text-gray-500">
       <p>Ejército 435 · Concepción · Chile</p>
-      <p>+56 9 3319 7338 — b.rebolledo@duocuc.cl</p>
+      <p>+56 9 3319 7338 — b.rebolledo@duocuc.cl</p>
     </footer>
   </section>
 
@@ -47,53 +67,7 @@
     </p>
     <p class="mb-6 text-justify">
       Me apasiona el desarrollo de software con impacto tangible, especialmente cuando la tecnología se conecta con la vida cotidiana, el territorio y la comunidad. Encuentro en el IoT una forma fascinante de percibir el entorno físico y traducirlo al mundo digital, generando datos que pueden transformarse en decisiones con sentido.
-    </p>
-    <p class="mb-6 text-justify">
-      Además, tengo un fuerte interés por la experiencia de usuario (UX/UI) como puente entre lo técnico y lo humano. Creo que una interfaz bien diseñada no solo facilita el uso de la tecnología, sino que también comunica valores, genera confianza y crea vínculos reales entre las personas y los sistemas que usamos.
-    </p>
-    <p class="mb-6 text-justify">
-      Aspiro a crear tecnología intuitiva, funcional y emocionalmente significativa.
-    </p>
-    <div class="grid sm:grid-cols-2 gap-8">
-      <div>
-        <h3 class="text-xl font-semibold text-green-300 mb-3">Habilidades técnicas</h3>
-        <ul class="list-disc list-inside space-y-1 text-gray-300">
-          <li>Desarrollo web: Angular 18+, Django, Flask</li>
-          <li>Bases de datos: PostgreSQL, InfluxDB, MySQL</li>
-          <li>APIs REST, Git & GitHub</li>
-          <li>IoT & Raspberry Pi (GPIO, sensores)</li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="text-xl font-semibold text-green-300 mb-3">Habilidades blandas</h3>
-        <ul class="list-disc list-inside space-y-1 text-gray-300">
-          <li>Comunicación efectiva y divulgación técnica</li>
-          <li>Resolución creativa de problemas</li>
-          <li>Liderazgo ágil (Scrum Master)</li>
-          <li>Aprendizaje continuo y adaptabilidad</li>
-        </ul>
-      </div>
-    </div>
-  </section>
-
-  <!-- PROYECTO DESTACADO -->
-  <section class="page max-w-5xl mx-auto py-12 px-8">
-    <h2 class="text-3xl font-bold text-green-400 mb-8">Proyecto Destacado · Tech Farming</h2>
-    <div class="grid lg:grid-cols-2 gap-6 items-start">
-      <figure class="rounded-lg overflow-hidden shadow-xl ring-1 ring-green-600/50">
-        <img src="assets/img/techfarming-dashboard.png" alt="Mockup Tech Farming" class="object-cover w-full h-full">
-      </figure>
-      <div class="space-y-4 text-gray-300">
-        <p><strong>Tech Farming</strong> es una plataforma inteligente de agricultura de precisión desarrollada como proyecto académico-profesional (APT) en DUOC UC. Combina IoT, visualización de datos en tiempo real y aprendizaje automático para optimizar el cuidado de invernaderos.</p>
-        <ul class="list-disc list-inside space-y-1">
-          <li>Frontend: Angular 18+ · Tailwind CSS · DaisyUI</li>
-          <li>Backend: Flask · APIs REST</li>
-          <li>Bases de datos: PostgreSQL e InfluxDB</li>
-          <li>Modelo Random Forest para predicción de temperatura</li>
-          <li>Integración con sensores reales vía Raspberry Pi</li>
-        </ul>
-        <p><em>Aprendizaje:</em> Potenció mi visión sobre el potencial social del software y el cruce con lo territorial y visual.</p>
-      </div>
+@@ -93,28 +114,43 @@
     </div>
     <div class="mt-10 grid md:grid-cols-3 gap-4">
       <img src="assets/img/techfarming-sensors.png" alt="Sensores" class="rounded-lg shadow-md">
@@ -120,5 +94,21 @@
   </section>
 
   <script src="js/scripts.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var splash = document.getElementById('splash-screen');
+      if (!splash) return;
+      setTimeout(function () {
+        splash.classList.add('hidden');
+        splash.addEventListener('transitionend', function () {
+          splash.remove();
+        });
+        var title = document.querySelector('h1');
+        if (title) {
+          title.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 2000);
+    });
+  </script>
 </body>
 </html>
