@@ -10,6 +10,51 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <link rel="stylesheet" href="css/custom.css">
   <style>
+
+    /* Contenedor de los puntos */
+    #splash-dots {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+      align-items: center;
+      margin-top: 2rem;
+      animation: none;
+    }
+    #splash-dots.fade-out { animation: none; }
+
+    .dot {
+      width: 0.8rem;
+      height: 0.8rem;
+      background: #10b981;
+      border-radius: 9999px;
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+
+    .dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+    .dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    /* rebote vertical */
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-10px); }
+    }
+
+    /* transición de opacidad (después de 2s) */
+    @keyframes fadeOutDots {
+      to { opacity: 0; transform: scale(0.8); }
+    }
+
+
+    @keyframes fadeInName {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
     /* Splash screen styles */
     #splash-screen {
       position: fixed;
@@ -92,244 +137,303 @@
     border-style:solid;
     border-color:transparent transparent #fff transparent;
   }
+  body.reveal main {
+    animation: fadeInMain 0.8s ease-out forwards;
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+
+  @keyframes fadeInMain {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  #avatar-light {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    clip-path: polygon(
+      0%   0%,
+      100% 0%,
+      100% 100%,
+      46%  100%,
+      46%  70%,
+      0%   70%
+    );
+    /* luz principal */
+    background: radial-gradient(
+      ellipse 60% 80% at 50% 85%,
+      rgba(255,255,240,0.7) 0%,
+      rgba(255,255,240,0)    60%
+    );
+    mix-blend-mode: screen;
+    opacity: 0;
+    transition: opacity .15s ease-out;
+    /* ------------------ AÑADIDO ------------------ */
+    filter: blur(4px);
+    /* el blur se cortará al límite del círculo gracias al border-radius */
+  }
+  #avatar-light.active {
+    opacity: 0.4;
+  }
+
   </style>
 </head>
 <body class="bg-[#0d1117] text-gray-200 font-sans leading-relaxed">
 
   <div id="splash-screen" class="fixed inset-0 flex items-center justify-center bg-[#0d1117] z-50">
-    <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-green-400 drop-shadow-lg">Benjamín Rebolledo</h1>
-  </div>
-
-  <!-- PORTADA -->
-  <section class="page h-screen flex flex-col items-center justify-center text-center px-6">
-    <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-green-400 drop-shadow-lg">
-      Benjamín Rebolledo
-    </h1>
-    <p class="mt-4 text-lg sm:text-xl text-gray-400">
-      Dossier de Postulación · Escuela de Sensibilización Tecnológica 2025
-    </p>
-    <div class="mt-10 relative">
-      <div class="w-48 h-48 rounded-full overflow-hidden ring-4 ring-green-500/60 shadow-lg">
-        <img id="portrait" src="assets/img/boca-cerrada.webp" alt="Retrato de Benjamín" class="object-cover w-full h-full">
-      </div>
-      <div id="speech-bubble" class="speech-bubble"></div>
-      <div id="speech-bubble-mobile" class="speech-bubble-mobile"></div>
+    <div id="splash-dots">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
     </div>
-    <footer class="mt-28 text-sm text-gray-500 sm:mt-12">
-      <p>Ejército 435 · Concepción · Chile</p>
-      <p>+56 9 3319 7338 — b.rebolledo@duocuc.cl</p>
-    </footer>
+  </div>
+  <main>
+    <!-- PORTADA -->
+    <section id="intro-content"
+         class="page h-screen flex flex-col items-center justify-center text-center px-6 
+                opacity-0 scale-95 transition-all duration-700">
+      <h1 id="main-title"
+          class="text-4xl sm:text-5xl font-extrabold tracking-tight text-green-400 drop-shadow-lg">
+        Benjamín Rebolledo
+      </h1>
+      <p class="mt-4 text-lg sm:text-xl text-gray-400">
+        Dossier de Postulación · Escuela de Sensibilización Tecnológica 2025
+      </p>
+      <div class="mt-10 relative">
+        <div class="w-48 h-48 rounded-full overflow-hidden ring-4 ring-green-500/60 shadow-lg">
+          <img id="portrait" src="assets/img/boca-cerrada.webp" alt="Retrato de Benjamín" class="object-cover w-full h-full">
+          <div id="avatar-light" class="absolute inset-0 pointer-events-none opacity-0 transition-opacity duration-150"></div>
+        </div>
+        <div id="speech-bubble" class="speech-bubble"></div>
+        <div id="speech-bubble-mobile" class="speech-bubble-mobile"></div>
+      </div>
+      <footer class="mt-28 text-sm text-gray-500 sm:mt-12">
+        <p>Ejército 435 · Concepción · Chile</p>
+        <p>+56 9 3319 7338 — b.rebolledo@duocuc.cl</p>
+      </footer>
+    </section>
+
+  <!-- SOBRE MÍ -->
+  <section class="page max-w-3xl mx-auto py-12 px-8">
+    <h2 class="text-3xl font-bold text-green-400 mb-8">Sobre mí</h2>
+    <p class="mb-6 text-justify">
+      Soy estudiante de Analista Programador Computacional en <strong>DUOC UC</strong>, con formación técnica en conectividad y redes. He desarrollado soluciones web combinando lenguajes como <em>Python</em>, <em>JavaScript</em> y <em>TypeScript</em>, y frameworks como <em>Angular</em>, <em>Flask</em> y <em>Django</em>, tanto en contextos académicos como en proyectos reales como <strong>Tech Farming</strong>.
+    </p>
+    <p class="mb-6 text-justify">
+      Me apasiona el desarrollo de software con impacto tangible, especialmente cuando la tecnología se conecta con la vida cotidiana, el territorio y la comunidad. Encuentro en el IoT una forma fascinante de percibir el entorno físico y traducirlo al mundo digital, generando datos que pueden transformarse en decisiones con sentido.
+    </p>
+    <p class="mb-6 text-justify">
+      Además, tengo un fuerte interés por la experiencia de usuario (UX/UI) como puente entre lo técnico y lo humano. Creo que una interfaz bien diseñada no solo facilita el uso de la tecnología, sino que también comunica valores, genera confianza y crea vínculos reales entre las personas y los sistemas que usamos.
+    </p>
+    <p class="mb-6 text-justify">
+      Aspiro a crear tecnología intuitiva, funcional y emocionalmente significativa.
+    </p>
+    <div class="grid sm:grid-cols-2 gap-8">
+      <div>
+        <h3 class="text-xl font-semibold text-green-300 mb-3">Habilidades técnicas</h3>
+        <ul class="list-disc list-inside space-y-1 text-gray-300">
+          <li>Desarrollo web: Angular 18+, Django, Flask</li>
+          <li>Bases de datos: PostgreSQL, InfluxDB, MySQL</li>
+          <li>APIs REST, Git & GitHub</li>
+          <li>IoT & Raspberry Pi (GPIO, sensores)</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xl font-semibold text-green-300 mb-3">Habilidades blandas</h3>
+        <ul class="list-disc list-inside space-y-1 text-gray-300">
+          <li>Comunicación efectiva y divulgación técnica</li>
+          <li>Resolución creativa de problemas</li>
+          <li>Liderazgo ágil (Scrum Master)</li>
+          <li>Aprendizaje continuo y adaptabilidad</li>
+        </ul>
+      </div>
+    </div>
   </section>
 
- <!-- SOBRE MÍ -->
- <section class="page max-w-3xl mx-auto py-12 px-8">
-  <h2 class="text-3xl font-bold text-green-400 mb-8">Sobre mí</h2>
-  <p class="mb-6 text-justify">
-    Soy estudiante de Analista Programador Computacional en <strong>DUOC UC</strong>, con formación técnica en conectividad y redes. He desarrollado soluciones web combinando lenguajes como <em>Python</em>, <em>JavaScript</em> y <em>TypeScript</em>, y frameworks como <em>Angular</em>, <em>Flask</em> y <em>Django</em>, tanto en contextos académicos como en proyectos reales como <strong>Tech Farming</strong>.
-  </p>
-  <p class="mb-6 text-justify">
-    Me apasiona el desarrollo de software con impacto tangible, especialmente cuando la tecnología se conecta con la vida cotidiana, el territorio y la comunidad. Encuentro en el IoT una forma fascinante de percibir el entorno físico y traducirlo al mundo digital, generando datos que pueden transformarse en decisiones con sentido.
-  </p>
-  <p class="mb-6 text-justify">
-    Además, tengo un fuerte interés por la experiencia de usuario (UX/UI) como puente entre lo técnico y lo humano. Creo que una interfaz bien diseñada no solo facilita el uso de la tecnología, sino que también comunica valores, genera confianza y crea vínculos reales entre las personas y los sistemas que usamos.
-  </p>
-  <p class="mb-6 text-justify">
-    Aspiro a crear tecnología intuitiva, funcional y emocionalmente significativa.
-  </p>
-  <div class="grid sm:grid-cols-2 gap-8">
-    <div>
-      <h3 class="text-xl font-semibold text-green-300 mb-3">Habilidades técnicas</h3>
-      <ul class="list-disc list-inside space-y-1 text-gray-300">
-        <li>Desarrollo web: Angular 18+, Django, Flask</li>
-        <li>Bases de datos: PostgreSQL, InfluxDB, MySQL</li>
-        <li>APIs REST, Git & GitHub</li>
-        <li>IoT & Raspberry Pi (GPIO, sensores)</li>
-      </ul>
+  <!-- PROYECTO DESTACADO -->
+  <section class="page max-w-5xl mx-auto py-12 px-8">
+    <h2 class="text-3xl font-bold text-green-400 mb-8">Proyecto Destacado · Tech Farming</h2>
+    <div class="grid lg:grid-cols-2 gap-6 items-start">
+      <figure class="rounded-lg overflow-hidden shadow-xl ring-1 ring-green-600/50">
+        <img src="assets/img/techfarming-dashboard.webp" alt="Mockup Tech Farming" class="object-cover w-full h-full">
+      </figure>
+      <div class="space-y-4 text-gray-300">
+        <p><strong>Tech Farming</strong> es una plataforma inteligente de agricultura de precisión desarrollada como proyecto académico-profesional (APT) en DUOC UC. Combina IoT, visualización de datos en tiempo real y aprendizaje automático para optimizar el cuidado de invernaderos.</p>
+        <ul class="list-disc list-inside space-y-1">
+          <li>Frontend: Angular 18+ · Tailwind CSS · DaisyUI</li>
+          <li>Backend: Flask · APIs REST</li>
+          <li>Bases de datos: PostgreSQL e InfluxDB</li>
+          <li>Modelo Random Forest para predicción de temperatura</li>
+          <li>Integración con sensores reales vía Raspberry Pi</li>
+        </ul>
+        <p><em>Aprendizaje:</em> Potenció mi visión sobre el potencial social del software y el cruce con lo territorial y visual.</p>
+      </div>
     </div>
-    <div>
-      <h3 class="text-xl font-semibold text-green-300 mb-3">Habilidades blandas</h3>
-      <ul class="list-disc list-inside space-y-1 text-gray-300">
-        <li>Comunicación efectiva y divulgación técnica</li>
-        <li>Resolución creativa de problemas</li>
-        <li>Liderazgo ágil (Scrum Master)</li>
-        <li>Aprendizaje continuo y adaptabilidad</li>
-      </ul>
+    <div class="mt-10 grid md:grid-cols-3 gap-4">
+      <img src="assets/img/techfarming-sensors.webp" alt="Sensores" class="rounded-lg shadow-md">
+      <img src="assets/img/techfarming-maps.webp" alt="Mapa de Zonas" class="rounded-lg shadow-md">
+      <img src="assets/img/techfarming-analytics.webp" alt="Analytics" class="rounded-lg shadow-md">
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- PROYECTO DESTACADO -->
-<section class="page max-w-5xl mx-auto py-12 px-8">
-  <h2 class="text-3xl font-bold text-green-400 mb-8">Proyecto Destacado · Tech Farming</h2>
-  <div class="grid lg:grid-cols-2 gap-6 items-start">
-    <figure class="rounded-lg overflow-hidden shadow-xl ring-1 ring-green-600/50">
-      <img src="assets/img/techfarming-dashboard.webp" alt="Mockup Tech Farming" class="object-cover w-full h-full">
-    </figure>
-    <div class="space-y-4 text-gray-300">
-      <p><strong>Tech Farming</strong> es una plataforma inteligente de agricultura de precisión desarrollada como proyecto académico-profesional (APT) en DUOC UC. Combina IoT, visualización de datos en tiempo real y aprendizaje automático para optimizar el cuidado de invernaderos.</p>
-      <ul class="list-disc list-inside space-y-1">
-        <li>Frontend: Angular 18+ · Tailwind CSS · DaisyUI</li>
-        <li>Backend: Flask · APIs REST</li>
-        <li>Bases de datos: PostgreSQL e InfluxDB</li>
-        <li>Modelo Random Forest para predicción de temperatura</li>
-        <li>Integración con sensores reales vía Raspberry Pi</li>
-      </ul>
-      <p><em>Aprendizaje:</em> Potenció mi visión sobre el potencial social del software y el cruce con lo territorial y visual.</p>
+  <!-- MOTIVACIÓN CREATIVA -->
+  <section class="page max-w-4xl mx-auto py-16 px-8 flex flex-col items-center text-center">
+    <blockquote class="text-2xl sm:text-3xl font-light italic text-gray-100 mb-10 max-w-2xl">
+      "La tecnología cobra verdadero sentido cuando despierta sensibilidad y promueve nuevas formas de habitar el mundo."
+    </blockquote>
+    <div class="w-full max-w-xl h-64 border-2 border-dashed border-gray-500/40 rounded-lg flex items-center justify-center mb-8">
+      <p class="text-gray-500">[Espacio para boceto / diagrama de tu proyecto artístico]</p>
     </div>
-  </div>
-  <div class="mt-10 grid md:grid-cols-3 gap-4">
-    <img src="assets/img/techfarming-sensors.webp" alt="Sensores" class="rounded-lg shadow-md">
-    <img src="assets/img/techfarming-maps.webp" alt="Mapa de Zonas" class="rounded-lg shadow-md">
-    <img src="assets/img/techfarming-analytics.webp" alt="Analytics" class="rounded-lg shadow-md">
-  </div>
-</section>
-
-<!-- MOTIVACIÓN CREATIVA -->
-<section class="page max-w-4xl mx-auto py-16 px-8 flex flex-col items-center text-center">
-  <blockquote class="text-2xl sm:text-3xl font-light italic text-gray-100 mb-10 max-w-2xl">
-    "La tecnología cobra verdadero sentido cuando despierta sensibilidad y promueve nuevas formas de habitar el mundo."
-  </blockquote>
-  <div class="w-full max-w-xl h-64 border-2 border-dashed border-gray-500/40 rounded-lg flex items-center justify-center mb-8">
-    <p class="text-gray-500">[Espacio para boceto / diagrama de tu proyecto artístico]</p>
-  </div>
-  <p class="text-gray-300 max-w-2xl">
-    En esta Escuela deseo desarrollar “<strong>Sensores de Ansiedad – La Máquina Siente</strong>”, una instalación interactiva que representa la fragilidad emocional de los sistemas tecnológicos ante la observación humana. Utilizando sensores y visión por computadora, el proyecto explora cómo un personaje digital tridimensional reacciona emocionalmente al acercamiento del público. Este ser sensible, en lugar de registrar datos pasivamente, expresa ansiedad, calma o miedo, dependiendo de cómo se produce la interacción.
-  </p>
-  <p class="mt-4 text-gray-300 max-w-2xl">
-    Con esta obra quiero cuestionar la lógica de la vigilancia, proponiendo una relación afectiva con lo digital. La instalación traduce información técnica en un lenguaje poético, invitando a reflexionar sobre nuestra presencia, empatía y responsabilidad frente a lo que las máquinas sienten o podrían sentir.
-  </p>
-  <p class="mt-8 text-gray-400">¡Gracias por considerar mi postulación!</p>
-</section>
+    <p class="text-gray-300 max-w-2xl">
+      En esta Escuela deseo desarrollar “<strong>Sensores de Ansiedad – La Máquina Siente</strong>”, una instalación interactiva que representa la fragilidad emocional de los sistemas tecnológicos ante la observación humana. Utilizando sensores y visión por computadora, el proyecto explora cómo un personaje digital tridimensional reacciona emocionalmente al acercamiento del público. Este ser sensible, en lugar de registrar datos pasivamente, expresa ansiedad, calma o miedo, dependiendo de cómo se produce la interacción.
+    </p>
+    <p class="mt-4 text-gray-300 max-w-2xl">
+      Con esta obra quiero cuestionar la lógica de la vigilancia, proponiendo una relación afectiva con lo digital. La instalación traduce información técnica en un lenguaje poético, invitando a reflexionar sobre nuestra presencia, empatía y responsabilidad frente a lo que las máquinas sienten o podrían sentir.
+    </p>
+    <p class="mt-8 text-gray-400">¡Gracias por considerar mi postulación!</p>
+  </section>
+</main>
   <script src="js/scripts.js"></script>
   <script>
+    // ——————————————————————————————————————————————————
+    // Variables globales para la animación de “typing” y seguimiento
+    const typingFrames  = [
+      'look-down-typing-1.webp',
+      'look-down-typing-2.webp',
+      'look-down-typing-3.webp'
+    ];
+    const blinkFrame    = 'close-eyes.webp';
+    const AvatarState   = { TRACK: 'track', TYPE: 'type' };
+    let state           = AvatarState.TRACK;
+    let blinkTimer, typeCycle;
+    let isTyping        = false;
+    let trackingEnabled = true;
+    let currentSrc      = 'look-center.webp';
+  
+    // Utilitario global para aleatorios
+    const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+  
+    // — Función global para cambiar la imagen del avatar —
+    function setAvatar(imgName) {
+      const avatar = document.getElementById('portrait');
+      if (!avatar) return;
+      avatar.src = `assets/img/${imgName}`;
+      currentSrc = imgName;
+    }
+  
+    // ——————————————————————————————————————————————————
+    // Splash screen y arranque
     document.addEventListener('DOMContentLoaded', () => {
-      const splash = document.getElementById('splash-screen');
-      const splashTitle = splash?.querySelector('h1');
+      const splash   = document.getElementById('splash-screen');
       const portrait = document.getElementById('portrait');
-
-      if (!splash || !splashTitle || !portrait) return;
-
-      // Asegúrate de que la imagen del avatar esté cargada
-      portrait.onload = () => {
-        // Transición suave cuando todo esté listo
-        requestAnimationFrame(() => {
-          const targetRect = document.querySelector('section.page h1').getBoundingClientRect();
-          const splashRect = splashTitle.getBoundingClientRect();
-          const dx = targetRect.left - splashRect.left;
-          const dy = targetRect.top - splashRect.top;
-
-          splashTitle.style.transition = 'transform 0.6s ease';
-          splashTitle.style.transform = `translate(${dx}px, ${dy}px)`;
-
-          splashTitle.addEventListener('transitionend', function handler() {
-            splashTitle.removeEventListener('transitionend', handler);
-            splash.classList.add('hidden');
-
-            splash.addEventListener('transitionend', () => {
-              splash.remove();
-              launchGreeting(); // <-- inicia animación de habla
-            });
-          });
-        });
+      if (!splash || !portrait) return;
+  
+      let minTimePassed   = false;
+      let imageLoaded     = portrait.complete;
+      let greetingStarted = false;
+  
+      window.launchGreeting = () => {
+        if (greetingStarted) return;
+        greetingStarted = true;
+        speak('Hola. ¡Bienvenid@ a mi dossier! Gracias por estar aquí.', enableEyeTracking);
       };
-
-      // En caso que ya esté cacheada
-      if (portrait.complete) {
-        portrait.onload(); // llama a onload manualmente
+  
+      function tryHideSplash() {
+        if (minTimePassed && imageLoaded) {
+          splash.classList.add('hidden');
+          splash.addEventListener('transitionend', () => {
+            splash.remove();
+            const intro = document.getElementById('intro-content');
+            intro.classList.replace('opacity-0','opacity-100');
+            intro.classList.replace('scale-95','scale-100');
+            intro.addEventListener('transitionend', window.launchGreeting, { once: true });
+          }, { once: true });
+        }
       }
+  
+      setTimeout(() => { minTimePassed = true; tryHideSplash(); }, 3000);
+      portrait.onload = () => { imageLoaded = true; tryHideSplash(); };
+      if (portrait.complete) portrait.onload();
     });
+  
+    // ——————————————————————————————————————————————————
+    // Lógica de habla y animación de boca
     (function () {
-      /* Rutas de los frames de boca */
       const frames = {
         closed: 'assets/img/boca-cerrada.webp',
         half:   'assets/img/boca-media.webp',
         open:   'assets/img/boca-abierta.webp',
       };
-
-      const TYPE_DELAY   = 75;   // ms por carácter impreso
-      const PHONEME_HOLD = 120;   // ms que la boca permanece abierta
-      const END_SILENCE  = 1500; // ms antes de cerrar tras terminar
-
-      let portrait, bubble, writing = false, openT;
-
-      /* Utilidades */
+      const TYPE_DELAY   = 75;
+      const PHONEME_HOLD = 120;
+      const END_SILENCE  = 1500;
+  
+      let portraitElem, bubble, writing = false, openT;
       const isVowel = c => /[aeiouáéíóúü]/i.test(c);
       const isPause = c => c === ' ' || c === '\n' || /[,.!?]/.test(c);
-
-      const setMouth = state => { if (portrait) portrait.src = frames[state]; };
-
-      function cycleOpen() {
-        setMouth('open');
-        clearTimeout(openT);
-        openT = setTimeout(() => setMouth('half'), PHONEME_HOLD);
-      }
-
-      function speak(text, onDone) {
-        if (writing) return;           // evita solapar llamadas
+  
+      window.speak = (text, onDone) => {
+        if (writing) return;
         writing = true;
         let i = 0;
         bubble.textContent = '';
         bubble.classList.add('show');
-
+  
+        function setMouth(state) {
+          if (!portraitElem) return;
+          portraitElem.src = frames[state];
+        }
+        function cycleOpen() {
+          setMouth('open');
+          clearTimeout(openT);
+          openT = setTimeout(() => setMouth('half'), PHONEME_HOLD);
+        }
+  
         (function typeLoop() {
           if (i < text.length) {
-            const ch = text[i];
+            const ch = text[i++];
             bubble.textContent += ch;
-
-            if (isPause(ch)) {
-              setMouth('closed');
-            } else if (isVowel(ch)) {
-              cycleOpen();             // gesto de vocal (aproxima sílaba)
-            } else {
-              setMouth('half');        // consonante
-            }
-
-            i++;
+            if      (isPause(ch)) setMouth('closed');
+            else if (isVowel(ch)) cycleOpen();
+            else                  setMouth('half');
             setTimeout(typeLoop, TYPE_DELAY);
           } else {
-            /* Fin de frase */
             clearTimeout(openT);
             setTimeout(() => {
               setMouth('closed');
               bubble.classList.remove('show');
               writing = false;
-              if (onDone) onDone();
+              onDone && onDone();
             }, END_SILENCE);
           }
         })();
-      }
-
-      /* Secuencia de arranque */
+      };
+  
       document.addEventListener('DOMContentLoaded', () => {
-        portrait = document.getElementById('portrait');
+        portraitElem = document.getElementById('portrait');
         const isMobile = window.innerWidth < 640;
         bubble = document.getElementById(isMobile ? 'speech-bubble-mobile' : 'speech-bubble');
-
+  
         const splash      = document.getElementById('splash-screen');
         const splashTitle = splash?.querySelector('h1');
-
-        function launchGreeting() {
-          speak('Hola. ¡Bienvenid@ a mi dossier! Gracias por estar aquí.', () => {
-            enableEyeTracking()
-          });
-        }
-
-        /* Coordinación con la animación del splash */
+        const launchGreeting = () =>
+          speak('Hola. ¡Bienvenid@ a mi dossier! Gracias por estar aquí.', enableEyeTracking);
+  
         if (splash && splashTitle) {
           splashTitle.addEventListener('transitionend', function handler() {
             splashTitle.removeEventListener('transitionend', handler);
             setTimeout(launchGreeting, 350);
           });
-        } else {
-          setTimeout(launchGreeting, 500);
         }
       });
     })();
+  
+    // ——————————————————————————————————————————————————
+    // Eye-tracking + parpadeo + typing
     function enableEyeTracking() {
       const avatar = document.getElementById('portrait');
       if (!avatar) return;
-
-      /* --- CONFIGURACIÓN --- */
+  
       const BLINK_CLOSED_MS = 140;
       const IDLE_DELAY_MS   = 3000;
       const REST_MIN_MS     = 3000;
@@ -338,116 +442,146 @@
       const FOCUS_MAX_MS    = 12000;
       const GLANCE_MIN_MS   = 4000;
       const GLANCE_MAX_MS   = 6000;
-
-      let idleT, blinkT, glanceT;
+  
+      let idleT, glanceT;
       let isTracking = false;
-      let currentSrc = 'look-center.webp';
-      let targetSrc = 'look-center.webp';
-
+      let targetSrc  = 'look-center.webp';
       const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-
-      function setAvatar(imgName) {
-        avatar.src = `assets/img/${imgName}`;
-        currentSrc = imgName;
-      }
-
-      const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
+  
       function scheduleBlink(isFocus) {
-        clearTimeout(blinkT);
-        const delay = isFocus ? rnd(FOCUS_MIN_MS, FOCUS_MAX_MS) : rnd(REST_MIN_MS, REST_MAX_MS);
-
-        blinkT = setTimeout(() => {
+        clearTimeout(blinkTimer);
+        const delay = isFocus
+          ? rnd(FOCUS_MIN_MS, FOCUS_MAX_MS)
+          : rnd(REST_MIN_MS,  REST_MAX_MS);
+        blinkTimer = setTimeout(() => {
           const last = currentSrc;
-          setAvatar('close-eyes.webp');
+          setAvatar(blinkFrame);
           setTimeout(() => setAvatar(last), BLINK_CLOSED_MS);
           scheduleBlink(isFocus);
         }, delay);
       }
-
+  
       function resetIdleTimer() {
         clearTimeout(idleT);
         idleT = setTimeout(() => {
           isTracking = false;
-          targetSrc = 'look-center.webp';
-          setAvatar(targetSrc);
+          setAvatar('look-center.webp');
           scheduleBlink(false);
         }, IDLE_DELAY_MS);
       }
-
+  
       function trackEye(e) {
+        if (!trackingEnabled) return;
         const rect = avatar.getBoundingClientRect();
-        const cx = rect.left + rect.width / 2;
-        const cy = rect.top + rect.height / 2;
-        const dx = e.clientX - cx;
-        const dy = e.clientY - cy;
+        const dx   = e.clientX - (rect.left + rect.width/2);
+        const dy   = e.clientY - (rect.top  + rect.height/2);
         const dist = Math.hypot(dx, dy);
-        const radius = rect.width / 2;
-
-        let src = 'look-center.webp';
-
-        if (dist > radius) {
-          const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-          if      (angle >=  -22 && angle <   22) src = 'look-right.webp';
-          else if (angle >=   22 && angle <   67) src = 'look-down-right.webp';
-          else if (angle >=   67 && angle <  112) src = 'look-down.webp';
-          else if (angle >=  112 && angle <  157) src = 'look-down-left.webp';
-          else if (angle >=  157 || angle < -157) src = 'look-left.webp';
-          else if (angle >= -157 && angle < -112) src = 'look-up-left.webp';
-          else if (angle >= -112 && angle <  -67) src = 'look-up.webp';
-          else if (angle >=  -67 && angle <  -22) src = 'look-up-right.webp';
+        const r    = rect.width/2;
+        let src    = 'look-center.webp';
+        if (dist > r) {
+          const ang = Math.atan2(dy, dx) * 180 / Math.PI;
+          if      (ang >= -22 && ang <   22) src = 'look-right.webp';
+          else if (ang >=  22 && ang <   67) src = 'look-down-right.webp';
+          else if (ang >=  67 && ang <  112) src = 'look-down.webp';
+          else if (ang >= 112 && ang <  157) src = 'look-down-left.webp';
+          else if (ang >= 157 || ang < -157) src = 'look-left.webp';
+          else if (ang >= -157&& ang < -112) src = 'look-up-left.webp';
+          else if (ang >= -112&& ang <  -67) src = 'look-up.webp';
+          else if (ang >=  -67&& ang <  -22) src = 'look-up-right.webp';
         }
-
         if (src !== targetSrc) {
           targetSrc = src;
           setAvatar(src);
         }
-
         if (!isTracking) {
           isTracking = true;
           scheduleBlink(true);
         }
-
         resetIdleTimer();
       }
-
+  
       function scheduleMobileGlance() {
-        const directions = [
-          'look-left.webp', 'look-right.webp', 'look-up.webp',
-          'look-up-left.webp', 'look-up-right.webp',
-          'look-center.webp'
+        const dirs = [
+          'look-left.webp','look-right.webp','look-up.webp',
+          'look-up-left.webp','look-up-right.webp','look-center.webp'
         ];
-
-        function nextGlance() {
-          const pick = directions[Math.floor(Math.random() * directions.length)];
-          setAvatar(pick);
-          glanceT = setTimeout(nextGlance, rnd(GLANCE_MIN_MS, GLANCE_MAX_MS));
-        }
-
-        nextGlance();
+        (function next() {
+          if (trackingEnabled) setAvatar(dirs[Math.floor(Math.random()*dirs.length)]);
+          glanceT = setTimeout(next, rnd(GLANCE_MIN_MS, GLANCE_MAX_MS));
+        })();
       }
-
-      /* --- Inicio según tipo de dispositivo --- */
+  
       if (isMobile) {
         scheduleBlink(false);
         scheduleMobileGlance();
       } else {
-        let rafScheduled = false;
-        document.addEventListener('mousemove', (e) => {
-          if (!rafScheduled) {
-            rafScheduled = true;
+        let raf = false;
+        document.addEventListener('mousemove', e => {
+          if (!raf) {
+            raf = true;
             requestAnimationFrame(() => {
               trackEye(e);
-              rafScheduled = false;
+              raf = false;
             });
           }
         });
-
         scheduleBlink(false);
         resetIdleTimer();
       }
+  
+      // Arranca el ciclo de typing
+      scheduleTyping();
     }
 
+    const avatarLight = document.getElementById('avatar-light');
+
+    function flashAvatarLight() {
+      avatarLight.classList.add('active');
+      setTimeout(() => avatarLight.classList.remove('active'), 150);
+    }
+  
+    function startTyping(duration = 4000, onDone) {
+      if (isTyping) return;
+      isTyping        = true;
+      trackingEnabled = false;
+      clearTimeout(blinkTimer);
+      clearInterval(typeCycle);
+      state = AvatarState.TYPE;
+
+      let idx = 0;
+      function cycle() {
+        flashAvatarLight();                      
+        setAvatar(typingFrames[idx]);
+        idx = (idx + 1) % typingFrames.length;
+      }
+      cycle();
+      typeCycle = setInterval(cycle, 180);
+  
+      function doBlink() {
+        setAvatar(blinkFrame);
+        setTimeout(cycle, 140);
+        blinkTimer = setTimeout(doBlink, rnd(2500, 3500));
+      }
+      blinkTimer = setTimeout(doBlink, rnd(2500, 3500));
+  
+      setTimeout(() => {
+        clearInterval(typeCycle);
+        clearTimeout(blinkTimer);
+        state           = AvatarState.TRACK;
+        isTyping        = false;
+        trackingEnabled = true;   // reactiva seguimiento
+        onDone && onDone();
+      }, duration);
+    }
+  
+    function scheduleTyping() {
+      setTimeout(() => {
+        if (!isTyping) startTyping(rnd(3000, 4000), scheduleTyping);
+        else scheduleTyping();
+      }, rnd(6000, 9000));
+    }
   </script>
+  
+  
 </body>
 </html>
