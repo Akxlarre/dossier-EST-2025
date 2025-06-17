@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dossier de Postulación – Escuela de Sensibilización Tecnológica 2025</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- jQuery CDN -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="css/custom.css">
+  <style>
+    @media print {
+      .page { page-break-after: always; }
+      a:hover { text-decoration: none; }
+    }
+  </style>
+</head>
+<body class="bg-[#0d1117] text-gray-200 font-sans leading-relaxed">
+
+  <!-- PORTADA -->
+  <section class="page h-screen flex flex-col items-center justify-center text-center px-6">
+    <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-green-400 drop-shadow-lg">
+      Benjamín Rebolledo
+    </h1>
+    <p class="mt-4 text-lg sm:text-xl text-gray-400">
+      Dossier de Postulación · Escuela de Sensibilización Tecnológica 2025
+    </p>
+    <div class="mt-10 w-48 h-48 rounded-full overflow-hidden ring-4 ring-green-500/60 shadow-lg">
+      <img src="assets/img/your-portrait.jpg" alt="Retrato de Benjamín" class="object-cover w-full h-full">
+    </div>
+    <footer class="mt-12 text-sm text-gray-500">
+      <p>Ejército 435 · Concepción · Chile</p>
+      <p>+56 9 3319 7338 — b.rebolledo@duocuc.cl</p>
+    </footer>
+  </section>
+
+  <!-- SOBRE MÍ -->
+  <section class="page max-w-3xl mx-auto py-12 px-8">
+    <h2 class="text-3xl font-bold text-green-400 mb-8">Sobre mí</h2>
+    <p class="mb-6 text-justify">
+      Soy estudiante de Analista Programador Computacional en <strong>DUOC UC</strong>, con formación técnica en conectividad y redes. He desarrollado soluciones web combinando lenguajes como <em>Python</em>, <em>JavaScript</em> y <em>TypeScript</em>, y frameworks como <em>Angular</em>, <em>Flask</em> y <em>Django</em>, tanto en contextos académicos como en proyectos reales como <strong>Tech Farming</strong>.
+    </p>
+    <p class="mb-6 text-justify">
+      Me apasiona el desarrollo de software con impacto tangible, especialmente cuando la tecnología se conecta con la vida cotidiana, el territorio y la comunidad. Encuentro en el IoT una forma fascinante de percibir el entorno físico y traducirlo al mundo digital, generando datos que pueden transformarse en decisiones con sentido.
+    </p>
+    <p class="mb-6 text-justify">
+      Además, tengo un fuerte interés por la experiencia de usuario (UX/UI) como puente entre lo técnico y lo humano. Creo que una interfaz bien diseñada no solo facilita el uso de la tecnología, sino que también comunica valores, genera confianza y crea vínculos reales entre las personas y los sistemas que usamos.
+    </p>
+    <p class="mb-6 text-justify">
+      Aspiro a crear tecnología intuitiva, funcional y emocionalmente significativa.
+    </p>
+    <div class="grid sm:grid-cols-2 gap-8">
+      <div>
+        <h3 class="text-xl font-semibold text-green-300 mb-3">Habilidades técnicas</h3>
+        <ul class="list-disc list-inside space-y-1 text-gray-300">
+          <li>Desarrollo web: Angular 18+, Django, Flask</li>
+          <li>Bases de datos: PostgreSQL, InfluxDB, MySQL</li>
+          <li>APIs REST, Git & GitHub</li>
+          <li>IoT & Raspberry Pi (GPIO, sensores)</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="text-xl font-semibold text-green-300 mb-3">Habilidades blandas</h3>
+        <ul class="list-disc list-inside space-y-1 text-gray-300">
+          <li>Comunicación efectiva y divulgación técnica</li>
+          <li>Resolución creativa de problemas</li>
+          <li>Liderazgo ágil (Scrum Master)</li>
+          <li>Aprendizaje continuo y adaptabilidad</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROYECTO DESTACADO -->
+  <section class="page max-w-5xl mx-auto py-12 px-8">
+    <h2 class="text-3xl font-bold text-green-400 mb-8">Proyecto Destacado · Tech Farming</h2>
+    <div class="grid lg:grid-cols-2 gap-6 items-start">
+      <figure class="rounded-lg overflow-hidden shadow-xl ring-1 ring-green-600/50">
+        <img src="assets/img/techfarming-dashboard.png" alt="Mockup Tech Farming" class="object-cover w-full h-full">
+      </figure>
+      <div class="space-y-4 text-gray-300">
+        <p><strong>Tech Farming</strong> es una plataforma inteligente de agricultura de precisión desarrollada como proyecto académico-profesional (APT) en DUOC UC. Combina IoT, visualización de datos en tiempo real y aprendizaje automático para optimizar el cuidado de invernaderos.</p>
+        <ul class="list-disc list-inside space-y-1">
+          <li>Frontend: Angular 18+ · Tailwind CSS · DaisyUI</li>
+          <li>Backend: Flask · APIs REST</li>
+          <li>Bases de datos: PostgreSQL e InfluxDB</li>
+          <li>Modelo Random Forest para predicción de temperatura</li>
+          <li>Integración con sensores reales vía Raspberry Pi</li>
+        </ul>
+        <p><em>Aprendizaje:</em> Potenció mi visión sobre el potencial social del software y el cruce con lo territorial y visual.</p>
+      </div>
+    </div>
+    <div class="mt-10 grid md:grid-cols-3 gap-4">
+      <img src="assets/img/techfarming-sensors.png" alt="Sensores" class="rounded-lg shadow-md">
+      <img src="assets/img/techfarming-maps.png" alt="Mapa de Zonas" class="rounded-lg shadow-md">
+      <img src="assets/img/techfarming-analytics.png" alt="Analytics" class="rounded-lg shadow-md">
+    </div>
+  </section>
+
+  <!-- MOTIVACIÓN CREATIVA -->
+  <section class="page max-w-4xl mx-auto py-16 px-8 flex flex-col items-center text-center">
+    <blockquote class="text-2xl sm:text-3xl font-light italic text-gray-100 mb-10 max-w-2xl">
+      "La tecnología cobra verdadero sentido cuando despierta sensibilidad y promueve nuevas formas de habitar el mundo."
+    </blockquote>
+    <div class="w-full max-w-xl h-64 border-2 border-dashed border-gray-500/40 rounded-lg flex items-center justify-center mb-8">
+      <p class="text-gray-500">[Espacio para boceto / diagrama de tu proyecto artístico]</p>
+    </div>
+    <p class="text-gray-300 max-w-2xl">
+      En esta Escuela deseo desarrollar “<strong>Sensores de Ansiedad – La Máquina Siente</strong>”, una instalación interactiva que representa la fragilidad emocional de los sistemas tecnológicos ante la observación humana. Utilizando sensores y visión por computadora, el proyecto explora cómo un personaje digital tridimensional reacciona emocionalmente al acercamiento del público. Este ser sensible, en lugar de registrar datos pasivamente, expresa ansiedad, calma o miedo, dependiendo de cómo se produce la interacción.
+    </p>
+    <p class="mt-4 text-gray-300 max-w-2xl">
+      Con esta obra quiero cuestionar la lógica de la vigilancia, proponiendo una relación afectiva con lo digital. La instalación traduce información técnica en un lenguaje poético, invitando a reflexionar sobre nuestra presencia, empatía y responsabilidad frente a lo que las máquinas sienten o podrían sentir.
+    </p>
+    <p class="mt-8 text-gray-400">¡Gracias por considerar mi postulación!</p>
+  </section>
+
+  <script src="js/scripts.js"></script>
+</body>
+</html>
