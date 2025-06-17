@@ -34,6 +34,64 @@
       .page { page-break-after: always; }
       a:hover { text-decoration: none; }
     }
+    .speech-bubble{
+    position:absolute;
+    left:100%;                 /* ancla al costado derecho */
+    top:50%;
+    transform:translate(1rem,-50%) scale(.8); /* desplazamiento + escala inicial */
+    padding:.6rem 1rem;
+    max-width:16rem;
+    color:#000;background:#fff;
+    border-radius:.75rem;
+    box-shadow:0 4px 8px rgba(0,0,0,.25);
+    opacity:0;pointer-events:none;
+    transition:transform .25s ease-out,opacity .25s ease-out;
+    text-align:left;z-index:10;
+  }
+  .speech-bubble.show{
+    opacity:1;
+    transform:translate(1rem,-50%) scale(1);  /* escala final */
+  }
+  /* Cola lateral */
+  .speech-bubble::after{
+    content:"";
+    position:absolute;
+    left:-.5rem;               /* pega la cola al borde izquierdo de la burbuja */
+    top:calc(50% - .5rem);
+    border-width:.5rem .5rem .5rem 0;
+    border-style:solid;
+    border-color:transparent #fff transparent transparent;
+  }
+
+  .speech-bubble-mobile{
+    position:absolute;
+    top:100%;                 /* justo debajo del avatar */
+    left:50%;
+    transform:translate(-50%,1rem) scale(.8);
+    padding:.6rem 1rem;
+    width: max-content;
+    max-width: 60vw;
+    min-width: 16rem;
+    color:#000;background:#fff;
+    border-radius:.75rem;
+    box-shadow:0 4px 8px rgba(0,0,0,.25);
+    opacity:0;pointer-events:none;
+    transition:transform .25s ease-out,opacity .25s ease-out;
+    z-index:30;text-align:left;
+  }
+  .speech-bubble-mobile.show{
+    opacity:1;
+    transform:translate(-50%,1rem) scale(1);
+  }
+  .speech-bubble-mobile::after{
+    content:"";
+    position:absolute;
+    top:-.5rem;               /* cola hacia ARRIBA */
+    left:50%;transform:translateX(-50%);
+    border-width:.5rem;
+    border-style:solid;
+    border-color:transparent transparent #fff transparent;
+  }
   </style>
 </head>
 <body class="bg-[#0d1117] text-gray-200 font-sans leading-relaxed">
@@ -50,10 +108,14 @@
     <p class="mt-4 text-lg sm:text-xl text-gray-400">
       Dossier de Postulación · Escuela de Sensibilización Tecnológica 2025
     </p>
-    <div class="mt-10 w-48 h-48 rounded-full overflow-hidden ring-4 ring-green-500/60 shadow-lg">
-      <img src="assets/img/your-portrait.jpg" alt="Retrato de Benjamín" class="object-cover w-full h-full">
+    <div class="mt-10 relative">
+      <div class="w-48 h-48 rounded-full overflow-hidden ring-4 ring-green-500/60 shadow-lg">
+        <img id="portrait" src="assets/img/boca-cerrada.png" alt="Retrato de Benjamín" class="object-cover w-full h-full">
+      </div>
+      <div id="speech-bubble" class="speech-bubble"></div>
+      <div id="speech-bubble-mobile" class="speech-bubble-mobile"></div>
     </div>
-    <footer class="mt-12 text-sm text-gray-500">
+    <footer class="mt-28 text-sm text-gray-500 sm:mt-12">
       <p>Ejército 435 · Concepción · Chile</p>
       <p>+56 9 3319 7338 — b.rebolledo@duocuc.cl</p>
     </footer>
@@ -165,6 +227,216 @@
           });
       }, 2000);
     });
+    (function () {
+      /* Rutas de los frames de boca */
+      const frames = {
+        closed: 'assets/img/boca-cerrada.png',
+        half:   'assets/img/boca-media.png',
+        open:   'assets/img/boca-abierta.png',
+      };
+
+      const TYPE_DELAY   = 75;   // ms por carácter impreso
+      const PHONEME_HOLD = 120;   // ms que la boca permanece abierta
+      const END_SILENCE  = 1500; // ms antes de cerrar tras terminar
+
+      let portrait, bubble, writing = false, openT;
+
+      /* Utilidades */
+      const isVowel = c => /[aeiouáéíóúü]/i.test(c);
+      const isPause = c => c === ' ' || c === '\n' || /[,.!?]/.test(c);
+
+      const setMouth = state => { if (portrait) portrait.src = frames[state]; };
+
+      function cycleOpen() {
+        setMouth('open');
+        clearTimeout(openT);
+        openT = setTimeout(() => setMouth('half'), PHONEME_HOLD);
+      }
+
+      function speak(text, onDone) {
+        if (writing) return;           // evita solapar llamadas
+        writing = true;
+        let i = 0;
+        bubble.textContent = '';
+        bubble.classList.add('show');
+
+        (function typeLoop() {
+          if (i < text.length) {
+            const ch = text[i];
+            bubble.textContent += ch;
+
+            if (isPause(ch)) {
+              setMouth('closed');
+            } else if (isVowel(ch)) {
+              cycleOpen();             // gesto de vocal (aproxima sílaba)
+            } else {
+              setMouth('half');        // consonante
+            }
+
+            i++;
+            setTimeout(typeLoop, TYPE_DELAY);
+          } else {
+            /* Fin de frase */
+            clearTimeout(openT);
+            setTimeout(() => {
+              setMouth('closed');
+              bubble.classList.remove('show');
+              writing = false;
+              if (onDone) onDone();
+            }, END_SILENCE);
+          }
+        })();
+      }
+
+      /* Secuencia de arranque */
+      document.addEventListener('DOMContentLoaded', () => {
+        portrait = document.getElementById('portrait');
+        const isMobile = window.innerWidth < 640;
+        bubble = document.getElementById(isMobile ? 'speech-bubble-mobile' : 'speech-bubble');
+
+        const splash      = document.getElementById('splash-screen');
+        const splashTitle = splash?.querySelector('h1');
+
+        function launchGreeting() {
+          speak('Hola. ¡Bienvenid@ a mi dossier! Gracias por estar aquí.', () => {
+            enableEyeTracking()
+          });
+        }
+
+        /* Coordinación con la animación del splash */
+        if (splash && splashTitle) {
+          splashTitle.addEventListener('transitionend', function handler() {
+            splashTitle.removeEventListener('transitionend', handler);
+            setTimeout(launchGreeting, 350);
+          });
+        } else {
+          setTimeout(launchGreeting, 500);
+        }
+      });
+    })();
+    function enableEyeTracking() {
+      const avatar = document.getElementById('portrait');
+      if (!avatar) return;
+
+      /* --- CONFIGURACIÓN --- */
+      const BLINK_CLOSED_MS = 140;
+      const IDLE_DELAY_MS   = 3000;
+      const REST_MIN_MS     = 3000;
+      const REST_MAX_MS     = 4000;
+      const FOCUS_MIN_MS    = 8000;
+      const FOCUS_MAX_MS    = 12000;
+      const GLANCE_MIN_MS   = 4000;
+      const GLANCE_MAX_MS   = 6000;
+
+      let idleT, blinkT, glanceT;
+      let isTracking = false;
+      let currentSrc = 'look-center.png';
+      let targetSrc = 'look-center.png';
+
+      const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+      function setAvatar(imgName) {
+        avatar.src = `assets/img/${imgName}`;
+        currentSrc = imgName;
+      }
+
+      const rnd = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+      function scheduleBlink(isFocus) {
+        clearTimeout(blinkT);
+        const delay = isFocus ? rnd(FOCUS_MIN_MS, FOCUS_MAX_MS) : rnd(REST_MIN_MS, REST_MAX_MS);
+
+        blinkT = setTimeout(() => {
+          const last = currentSrc;
+          setAvatar('close-eyes.png');
+          setTimeout(() => setAvatar(last), BLINK_CLOSED_MS);
+          scheduleBlink(isFocus);
+        }, delay);
+      }
+
+      function resetIdleTimer() {
+        clearTimeout(idleT);
+        idleT = setTimeout(() => {
+          isTracking = false;
+          targetSrc = 'look-center.png';
+          setAvatar(targetSrc);
+          scheduleBlink(false);
+        }, IDLE_DELAY_MS);
+      }
+
+      function trackEye(e) {
+        const rect = avatar.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        const dist = Math.hypot(dx, dy);
+        const radius = rect.width / 2;
+
+        let src = 'look-center.png';
+
+        if (dist > radius) {
+          const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+          if      (angle >=  -22 && angle <   22) src = 'look-right.png';
+          else if (angle >=   22 && angle <   67) src = 'look-down-right.png';
+          else if (angle >=   67 && angle <  112) src = 'look-down.png';
+          else if (angle >=  112 && angle <  157) src = 'look-down-left.png';
+          else if (angle >=  157 || angle < -157) src = 'look-left.png';
+          else if (angle >= -157 && angle < -112) src = 'look-up-left.png';
+          else if (angle >= -112 && angle <  -67) src = 'look-up.png';
+          else if (angle >=  -67 && angle <  -22) src = 'look-up-right.png';
+        }
+
+        if (src !== targetSrc) {
+          targetSrc = src;
+          setAvatar(src);
+        }
+
+        if (!isTracking) {
+          isTracking = true;
+          scheduleBlink(true);
+        }
+
+        resetIdleTimer();
+      }
+
+      function scheduleMobileGlance() {
+        const directions = [
+          'look-left.png', 'look-right.png', 'look-up.png',
+          'look-up-left.png', 'look-up-right.png',
+          'look-center.png'
+        ];
+
+        function nextGlance() {
+          const pick = directions[Math.floor(Math.random() * directions.length)];
+          setAvatar(pick);
+          glanceT = setTimeout(nextGlance, rnd(GLANCE_MIN_MS, GLANCE_MAX_MS));
+        }
+
+        nextGlance();
+      }
+
+      /* --- Inicio según tipo de dispositivo --- */
+      if (isMobile) {
+        scheduleBlink(false);
+        scheduleMobileGlance();
+      } else {
+        let rafScheduled = false;
+        document.addEventListener('mousemove', (e) => {
+          if (!rafScheduled) {
+            rafScheduled = true;
+            requestAnimationFrame(() => {
+              trackEye(e);
+              rafScheduled = false;
+            });
+          }
+        });
+
+        scheduleBlink(false);
+        resetIdleTimer();
+      }
+    }
+
   </script>
 </body>
 </html>
