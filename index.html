@@ -688,7 +688,7 @@
         clearTimeout(blinkTimer);
         state           = AvatarState.TRACK;
         isTyping        = false;
-        trackingEnabled = true;   // reactiva seguimiento
+        trackingEnabled = true;   
         onDone && onDone();
       }, duration);
     }
@@ -708,13 +708,11 @@
       document.querySelectorAll('.zoomable').forEach(img => {
         img.style.cursor = 'pointer';
         img.addEventListener('click', () => {
-          // Usa data-large si quieres una versión de mayor resolución:
           const src = img.dataset.large || img.src;
           const alt = img.alt || '';
           modalImg.src = src;
           modalImg.alt = alt;
           modal.classList.remove('hidden');
-          // Opcional: bloquear scroll de fondo
           document.body.style.overflow = 'hidden';
         });
       });
@@ -772,7 +770,6 @@
         }
       }
 
-      // init
       mql.addListener(updateListener);
       updateListener(mql);
 
@@ -793,18 +790,19 @@
         else           window.removeEventListener('keydown', keyHandler);
       });
     });
+    // ——————————————————————————————————————————————————
     document.addEventListener('DOMContentLoaded', () => {
-      // 1) Esperamos a que la portada esté visible y 20s sin interacción
-      const hintTimeout = setTimeout(showScrollHint, 20000);
+      // 1) Esperamos a que la portada esté visible y 16s sin interacción
+      const hintTimeout = setTimeout(showScrollHint, 16000);
 
       function showScrollHint() {
         const isMobile = window.innerWidth < 640;
         const jsonPath = isMobile
-          ? '/assets/img/swipe-up.json'
-          : '/assets/img/scroll-down.json';
+          ? 'assets/img/swipe-up.json'
+          : 'assets/img/scroll-down.json';
 
         const hintEl = document.getElementById('scroll-hint');
-        hintEl.classList.remove('hidden');             // lo mostramos
+        hintEl.classList.remove('hidden');            
         // opcional: fade-in
         hintEl.style.opacity = 0;
         requestAnimationFrame(() => {
@@ -825,7 +823,6 @@
         const stopHint = () => {
           clearTimeout(hintTimeout);
           player.stop();
-          // fade-out rápido
           hintEl.style.transition = 'opacity .2s';
           hintEl.style.opacity = 0;
           setTimeout(() => hintEl.remove(), 300);
