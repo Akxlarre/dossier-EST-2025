@@ -8,7 +8,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- jQuery CDN -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <link rel="stylesheet" href="css/custom.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
   <style>
 
     /* Contenedor de los puntos */
@@ -177,7 +177,58 @@
   #avatar-light.active {
     opacity: 0.4;
   }
+  #image-modal {
+    transition: opacity .2s ease;
+  }
+  #image-modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+  #image-modal:not(.hidden) {
+    opacity: 1;
+  }
+  html {
+    scroll-snap-type: none;
+  }
 
+  @media (min-width: 1024px) {
+    html {
+      scroll-snap-type: y mandatory;
+    }
+    main#fullpage {
+      overflow: hidden;   /* desktop */
+    }
+  }
+
+  @media (max-width: 1023px) {
+    main#fullpage {
+      overflow-y: auto;   /* móvil */
+    }
+  }
+
+
+  section {
+    scroll-snap-align: start;
+  }
+  main#fullpage {
+    scroll-behavior: smooth;
+    overflow: hidden;   /* desktop */
+  }
+  /* … */
+  @media (max-width: 1023px) {
+    main#fullpage {
+      overflow-y: auto; /* móvil */
+    }
+  }
+  #fullpage > section {
+    min-height: 100vh;
+  }
+
+  @media (min-width: 1024px) {
+    #fullpage > section {
+      height: 100vh;
+    }
+  }
   </style>
 </head>
 <body class="bg-[#0d1117] text-gray-200 font-sans leading-relaxed">
@@ -187,11 +238,24 @@
       <div class="dot"></div><div class="dot"></div><div class="dot"></div>
     </div>
   </div>
-  <main>
+  <main
+    id="fullpage"
+    class="
+      h-screen                     /* igual altura que el viewport */
+      overflow-y-auto              /* permite scroll siempre */
+      overscroll-contain           /* evita rebote en extremos */
+      scroll-behavior-smooth       /* scroll suave */
+      lg:scroll-snap-y             /* snap sólo en desktop */
+      lg:scroll-snap-mandatory
+    "
+  >
     <!-- PORTADA -->
-    <section id="intro-content"
-         class="page h-screen flex flex-col items-center justify-center text-center px-6 
-                opacity-0 scale-95 transition-all duration-700">
+    <section
+      id="intro-content"
+      class="page h-screen lg:scroll-snap-align-start lg:scroll-snap-stop-always
+         flex flex-col items-center justify-center text-center px-6
+         opacity-0 scale-95 transition-all duration-700"
+    >
       <h1 id="main-title"
           class="text-4xl sm:text-5xl font-extrabold tracking-tight text-green-400 drop-shadow-lg">
         Benjamín Rebolledo
@@ -211,10 +275,22 @@
         <p>Ejército 435 · Concepción · Chile</p>
         <p>+56 9 3319 7338 — b.rebolledo@duocuc.cl</p>
       </footer>
+      <div id="scroll-hint"
+        class="hidden fixed bottom-8 left-1/2 transform -translate-x-1/2 w-16 h-16 pointer-events-none z-50">
+    </div>
     </section>
 
   <!-- SOBRE MÍ -->
-  <section class="page max-w-3xl mx-auto py-12 px-8">
+  <section
+      id="sobre-mi"
+      class="
+        page
+        lg:h-screen
+        lg:scroll-snap-align-start
+        max-w-3xl mx-auto py-12 px-8
+        lg:flex lg:flex-col lg:justify-center lg:items-center
+      "
+    >
     <h2 class="text-3xl font-bold text-green-400 mb-8">Sobre mí</h2>
     <p class="mb-6 text-justify">
       Soy estudiante de Analista Programador Computacional en <strong>DUOC UC</strong>, con formación técnica en conectividad y redes. He desarrollado soluciones web combinando lenguajes como <em>Python</em>, <em>JavaScript</em> y <em>TypeScript</em>, y frameworks como <em>Angular</em>, <em>Flask</em> y <em>Django</em>, tanto en contextos académicos como en proyectos reales como <strong>Tech Farming</strong>.
@@ -251,11 +327,20 @@
   </section>
 
   <!-- PROYECTO DESTACADO -->
-  <section class="page max-w-5xl mx-auto py-12 px-8">
+  <section
+      id="proyecto-destacado"
+      class="
+        page
+        lg:h-screen
+        lg:scroll-snap-align-start
+        max-w-5xl mx-auto py-12 px-8
+        lg:flex lg:flex-col lg:justify-center lg:items-center
+      "
+    >
     <h2 class="text-3xl font-bold text-green-400 mb-8">Proyecto Destacado · Tech Farming</h2>
-    <div class="grid lg:grid-cols-2 gap-6 items-start">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:items-center">
       <figure class="rounded-lg overflow-hidden shadow-xl ring-1 ring-green-600/50">
-        <img src="assets/img/techfarming-dashboard.webp" alt="Mockup Tech Farming" class="object-cover w-full h-full">
+        <img src="assets/img/datos_sensor.webp" alt="Mockup Tech Farming" class="object-cover w-full h-full zoomable">
       </figure>
       <div class="space-y-4 text-gray-300">
         <p><strong>Tech Farming</strong> es una plataforma inteligente de agricultura de precisión desarrollada como proyecto académico-profesional (APT) en DUOC UC. Combina IoT, visualización de datos en tiempo real y aprendizaje automático para optimizar el cuidado de invernaderos.</p>
@@ -270,30 +355,64 @@
       </div>
     </div>
     <div class="mt-10 grid md:grid-cols-3 gap-4">
-      <img src="assets/img/techfarming-sensors.webp" alt="Sensores" class="rounded-lg shadow-md">
-      <img src="assets/img/techfarming-maps.webp" alt="Mapa de Zonas" class="rounded-lg shadow-md">
-      <img src="assets/img/techfarming-analytics.webp" alt="Analytics" class="rounded-lg shadow-md">
+      <img src="assets/img/inicio.webp" alt="Inicio" class="rounded-lg shadow-md zoomable">
+      <img src="assets/img/invernadero.webp" alt="Invernadero" class="rounded-lg shadow-md zoomable">
+      <img src="assets/img/perfil.webp" alt="Perfil" class="rounded-lg shadow-md zoomable">
     </div>
   </section>
 
-  <!-- MOTIVACIÓN CREATIVA -->
-  <section class="page max-w-4xl mx-auto py-16 px-8 flex flex-col items-center text-center">
-    <blockquote class="text-2xl sm:text-3xl font-light italic text-gray-100 mb-10 max-w-2xl">
-      "La tecnología cobra verdadero sentido cuando despierta sensibilidad y promueve nuevas formas de habitar el mundo."
+  <section
+      id="motivacion"
+      class="
+        page
+        lg:h-screen
+        lg:scroll-snap-align-start
+        max-w-4xl mx-auto py-16 px-8
+        lg:flex lg:flex-col lg:justify-center lg:items-center
+      "
+    >
+    <blockquote class="text-2xl sm:text-3xl font-light italic text-gray-100 mb-12 max-w-2xl mx-auto text-center">
+      “La tecnología cobra verdadero sentido cuando despierta sensibilidad y promueve nuevas formas de habitar el mundo.”
     </blockquote>
-    <div class="w-full max-w-xl h-64 border-2 border-dashed border-gray-500/40 rounded-lg flex items-center justify-center mb-8">
-      <p class="text-gray-500">[Espacio para boceto / diagrama de tu proyecto artístico]</p>
+  
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start mb-12">
+      <!-- Figura revisada -->
+      <figure class="w-full overflow-visible rounded-lg shadow-xl">
+        <img
+          src="assets/img/representacion.webp"
+          alt="Instalación interactiva ‘Sensores de Ansiedad’ mostrando la reacción del personaje"
+          class="w-full h-auto object-contain zoomable"
+        >
+        <figcaption class="mt-2 text-sm text-gray-500 text-center">
+          Captura conceptual de la instalación: el personaje reacciona según la proximidad del público.
+        </figcaption>
+      </figure>
+  
+      <!-- Texto explicativo -->
+      <div class="space-y-6 text-gray-300">
+        <p>
+          En esta Escuela deseo desarrollar <strong>“Sensores de Ansiedad – La Máquina Siente”</strong>, una instalación interactiva que representa la fragilidad emocional de los sistemas tecnológicos ante la observación humana. Utilizando sensores y visión por computadora, el proyecto explora cómo un personaje digital tridimensional reacciona emocionalmente al acercamiento del público.
+        </p>
+        <p>
+          Este ser sensible, en lugar de registrar datos pasivamente, expresa ansiedad, calma o miedo dependiendo de la interacción. Con ello, busco cuestionar la lógica de la vigilancia y proponer una relación afectiva con lo digital.
+        </p>
+        <p>
+          La pieza traduce información técnica en un lenguaje poético, invitando a reflexionar sobre nuestra presencia, empatía y responsabilidad frente a lo que las máquinas sienten o podrían llegar a sentir.
+        </p>
+      </div>
     </div>
-    <p class="text-gray-300 max-w-2xl">
-      En esta Escuela deseo desarrollar “<strong>Sensores de Ansiedad – La Máquina Siente</strong>”, una instalación interactiva que representa la fragilidad emocional de los sistemas tecnológicos ante la observación humana. Utilizando sensores y visión por computadora, el proyecto explora cómo un personaje digital tridimensional reacciona emocionalmente al acercamiento del público. Este ser sensible, en lugar de registrar datos pasivamente, expresa ansiedad, calma o miedo, dependiendo de cómo se produce la interacción.
-    </p>
-    <p class="mt-4 text-gray-300 max-w-2xl">
-      Con esta obra quiero cuestionar la lógica de la vigilancia, proponiendo una relación afectiva con lo digital. La instalación traduce información técnica en un lenguaje poético, invitando a reflexionar sobre nuestra presencia, empatía y responsabilidad frente a lo que las máquinas sienten o podrían sentir.
-    </p>
-    <p class="mt-8 text-gray-400">¡Gracias por considerar mi postulación!</p>
+  
+    <p class="mt-8 text-gray-400 text-center">¡Gracias por considerar mi postulación!</p>
   </section>
+  <!-- LIGHTBOX MODAL -->
+  <div id="image-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
+    <button id="modal-close"
+            class="absolute top-4 right-4 text-white text-3xl leading-none focus:outline-none">
+      &times;
+    </button>
+    <img id="modal-img" src="" alt="" class="max-h-full max-w-full rounded-lg shadow-lg" />
+  </div>
 </main>
-  <script src="js/scripts.js"></script>
   <script>
     // ——————————————————————————————————————————————————
     // Variables globales para la animación de “typing” y seguimiento
@@ -580,8 +699,143 @@
         else scheduleTyping();
       }, rnd(6000, 9000));
     }
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('image-modal');
+      const modalImg = document.getElementById('modal-img');
+      const closeBtn = document.getElementById('modal-close');
+
+      // Al hacer clic en cualquier miniatura .zoomable
+      document.querySelectorAll('.zoomable').forEach(img => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', () => {
+          // Usa data-large si quieres una versión de mayor resolución:
+          const src = img.dataset.large || img.src;
+          const alt = img.alt || '';
+          modalImg.src = src;
+          modalImg.alt = alt;
+          modal.classList.remove('hidden');
+          // Opcional: bloquear scroll de fondo
+          document.body.style.overflow = 'hidden';
+        });
+      });
+
+      // Cerrar modal
+      function closeModal() {
+        modal.classList.add('hidden');
+        modalImg.src = '';
+        document.body.style.overflow = '';
+      }
+      closeBtn.addEventListener('click', closeModal);
+      modal.addEventListener('click', e => {
+        // Si hacen clic fuera de la imagen, cerrar
+        if (e.target === modal) closeModal();
+      });
+      // Cerrar con Escape
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+          closeModal();
+        }
+      });
+    });
+    document.addEventListener('DOMContentLoaded', ()=> {
+      const mql = window.matchMedia('(min-width: 1024px)');
+      let isMoving = false;
+      let current  = 0;
+      const sections = Array.from(document.querySelectorAll('#fullpage > section'));
+
+      function scrollHandler(e) {
+        // sólo ejecuta si seguimos en desktop
+        if (!mql.matches) return;
+        if (isMoving) {
+          e.preventDefault();
+          return;
+        }
+        if (e.deltaY > 0 && current < sections.length - 1) {
+          current++;
+        } else if (e.deltaY < 0 && current > 0) {
+          current--;
+        } else {
+          return;
+        }
+        isMoving = true;
+        sections[current].scrollIntoView({behavior: 'smooth'});
+        setTimeout(()=> isMoving = false, 800);
+        e.preventDefault();
+      }
+
+      // controlador que añade/quita el listener según el ancho
+      function updateListener(evt) {
+        if (evt.matches) {
+          window.addEventListener('wheel', scrollHandler, {passive: false});
+        } else {
+          window.removeEventListener('wheel', scrollHandler);
+        }
+      }
+
+      // init
+      mql.addListener(updateListener);
+      updateListener(mql);
+
+      // Opcional: lo mismo para flechas arriba/abajo
+      function keyHandler(e) {
+        if (!mql.matches || isMoving) return;
+        if (e.key === 'ArrowDown' && current < sections.length - 1) {
+          current++; sections[current].scrollIntoView({behavior:'smooth'}); isMoving=true;
+        }
+        if (e.key === 'ArrowUp'   && current > 0) {
+          current--; sections[current].scrollIntoView({behavior:'smooth'}); isMoving=true;
+        }
+        setTimeout(()=> isMoving = false, 800);
+      }
+      mql.matches && window.addEventListener('keydown', keyHandler);
+      mql.addListener(e => {
+        if (e.matches) window.addEventListener('keydown', keyHandler);
+        else           window.removeEventListener('keydown', keyHandler);
+      });
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+      // 1) Esperamos a que la portada esté visible y 20s sin interacción
+      const hintTimeout = setTimeout(showScrollHint, 20000);
+
+      function showScrollHint() {
+        const isMobile = window.innerWidth < 640;
+        const jsonPath = isMobile
+          ? '/assets/img/swipe-up.json'
+          : '/assets/img/scroll-down.json';
+
+        const hintEl = document.getElementById('scroll-hint');
+        hintEl.classList.remove('hidden');             // lo mostramos
+        // opcional: fade-in
+        hintEl.style.opacity = 0;
+        requestAnimationFrame(() => {
+          hintEl.style.transition = 'opacity .3s';
+          hintEl.style.opacity = 1;
+        });
+
+        // 2) Cargamos y arrancamos la Lottie
+        const player = lottie.loadAnimation({
+          container: hintEl,
+          renderer:  'svg',
+          loop:      true,
+          autoplay:  true,
+          path:      jsonPath
+        });
+
+        // 3) Detener en la primera interacción
+        const stopHint = () => {
+          clearTimeout(hintTimeout);
+          player.stop();
+          // fade-out rápido
+          hintEl.style.transition = 'opacity .2s';
+          hintEl.style.opacity = 0;
+          setTimeout(() => hintEl.remove(), 300);
+          window.removeEventListener('wheel', stopHint);
+          window.removeEventListener('touchstart', stopHint);
+        };
+        window.addEventListener('wheel', stopHint, { once: true, passive: true });
+        window.addEventListener('touchstart', stopHint, { once: true, passive: true });
+      }
+    });
   </script>
-  
-  
 </body>
 </html>
