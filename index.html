@@ -797,9 +797,10 @@
 
       function showScrollHint() {
         const isMobile = window.innerWidth < 640;
+        const BASE = '/dossier-EST-2025';
         const jsonPath = isMobile
-          ? 'assets/img/swipe-up.json'
-          : 'assets/img/scroll-down.json';
+          ? `${BASE}/assets/img/swipe-up.json`
+          : `${BASE}/assets/img/scroll-down.json`;  
 
         const hintEl = document.getElementById('scroll-hint');
         hintEl.classList.remove('hidden');            
