@@ -196,7 +196,7 @@
       scroll-snap-type: y mandatory;
     }
     main#fullpage {
-      overflow: hidden;   /* desktop */
+      overflow-y: auto;   /* desktop */
     }
   }
 
@@ -212,7 +212,7 @@
   }
   main#fullpage {
     scroll-behavior: smooth;
-    overflow: hidden;   /* desktop */
+    overflow-y: auto;   /* desktop */
   }
   /* … */
   @media (max-width: 1023px) {
@@ -226,7 +226,7 @@
 
   @media (min-width: 1024px) {
     #fullpage > section {
-      height: 100vh;
+      min-height: 100vh;
     }
   }
   #scroll-hint {
