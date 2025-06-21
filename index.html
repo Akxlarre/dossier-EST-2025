@@ -750,6 +750,10 @@
       function scrollHandler(e) {
         // sólo ejecuta si seguimos en desktop
         if (!mql.matches) return;
+
+        // evitar el snap si la sección actual es más alta que la ventana
+        if (sections[current].scrollHeight > window.innerHeight) return;
+
         if (isMoving) {
           e.preventDefault();
           return;
@@ -776,7 +780,7 @@
         }
       }
 
-      mql.addListener(updateListener);
+      mql.addEventListener('change', updateListener);
       updateListener(mql);
 
       // Opcional: lo mismo para flechas arriba/abajo
@@ -791,7 +795,7 @@
         setTimeout(()=> isMoving = false, 800);
       }
       mql.matches && window.addEventListener('keydown', keyHandler);
-      mql.addListener(e => {
+      mql.addEventListener('change', e => {
         if (e.matches) window.addEventListener('keydown', keyHandler);
         else           window.removeEventListener('keydown', keyHandler);
       });
