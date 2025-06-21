@@ -224,11 +224,6 @@
     min-height: 100vh;
   }
 
-  @media (min-width: 1024px) {
-    #fullpage > section {
-      min-height: 100vh;
-    }
-  }
   #scroll-hint {
     bottom: 2rem;
     left: 50%;
@@ -252,7 +247,7 @@
   <main
     id="fullpage"
     class="
-      h-screen                     /* igual altura que el viewport */
+      min-h-screen                /* igual altura que el viewport */
       overflow-y-auto              /* permite scroll siempre */
       overscroll-contain           /* evita rebote en extremos */
       scroll-behavior-smooth       /* scroll suave */
@@ -263,7 +258,7 @@
     <!-- PORTADA -->
     <section
       id="intro-content"
-      class="page h-screen lg:scroll-snap-align-start lg:scroll-snap-stop-always
+      class="page min-h-screen lg:scroll-snap-align-start lg:scroll-snap-stop-always
          flex flex-col items-center justify-center text-center px-6
          opacity-0 scale-95 transition-all duration-700"
     >
@@ -296,7 +291,7 @@
       id="sobre-mi"
       class="
         page
-        lg:h-screen
+        lg:min-h-screen
         lg:scroll-snap-align-start
         max-w-3xl mx-auto py-12 px-8
         lg:flex lg:flex-col lg:justify-center lg:items-center
@@ -342,7 +337,7 @@
       id="proyecto-destacado"
       class="
         page
-        lg:h-screen
+        lg:min-h-screen
         lg:scroll-snap-align-start
         max-w-5xl mx-auto py-12 px-8
         lg:flex lg:flex-col lg:justify-center lg:items-center
@@ -376,7 +371,7 @@
       id="motivacion"
       class="
         page
-        lg:h-screen
+        lg:min-h-screen
         lg:scroll-snap-align-start
         max-w-4xl mx-auto py-16 px-8
         lg:flex lg:flex-col lg:justify-center lg:items-center
