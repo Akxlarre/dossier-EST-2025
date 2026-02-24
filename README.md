@@ -1,68 +1,28 @@
-# Project README
+# Application Dossier
 
-## Description
-This project aims to deliver a comprehensive dossier for the year 2025, presenting key insights and relevant information in an engaging manner.
+The application dossier provides a comprehensive overview of our project's objectives, structure, and implementation strategy. It includes the following key components:
 
-## Features
-- Interactive elements
-- Dynamic data presentation
-- User-friendly interface
+## Project Overview
+- **Project Name**: Dossier EST 2025
+- **Version**: 1.0
+- **Description**: This project aims to develop an efficient and user-friendly application for managing dossiers in a digital format.
 
-## Tech Stack
-- HTML5
-- CSS3
-- JavaScript
-- React
-- Node.js
+## Key Features
+- User Management
+- Document Uploading
+- Secure Storage
+- Search Functionality
 
-## File Structure
-```
-├── /src
-│   ├── /components
-│   ├── /assets
-│   ├── App.js
-│   └── index.js
-├── /public
-│   └── index.html
-└── package.json
-```
+## Installation Instructions
+1. Clone the repository: `git clone https://github.com/Akxlarre/dossier-EST-2025.git`
+2. Navigate to the project directory: `cd dossier-EST-2025`
+3. Install dependencies: `npm install`
 
-## Usage Instructions
-1. Clone the repository using `git clone <repository-url>`.
-2. Navigate to the project folder using `cd dossier-EST-2025`.
-3. Install dependencies with `npm install`.
-4. Start the application using `npm start`.
+## Usage
+After installation, run the application using `npm start` and follow the instructions on your local server.
 
-## Responsiveness
-The application is designed to be responsive, ensuring a seamless experience across different devices and screen sizes.
+## Contributing
+Contributions are welcome! Please read the contributing guidelines for more details.
 
-## Dossier Sections
-- Introduction
-- Key Metrics
-- Summary
-- Conclusion
-
-## Avatar States
-- Hover effects
-- Active states
-- Disabled states
-
-## Special Effects
-- Fade transitions
-- Parallax scrolling
-
-## Configuration
-To configure the application, modify the settings in the configuration file located in the `/src/config` directory.
-
-## Troubleshooting
-If you encounter issues, check the following:
-- Confirm all dependencies are installed.
-- Clear the cache and try restarting the app.
-
-## Contact Information
-For further assistance, please reach out to:  
-**Email:** support@example.com  
-**Chat:** [Support Chat Link]  
-
----  
-_Last updated: 2026-02-24 13:26:11 (UTC)_
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
